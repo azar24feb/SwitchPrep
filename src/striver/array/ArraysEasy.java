@@ -1,3 +1,5 @@
+package src.striver.array;
+
 import java.util.Arrays;
 
 public class ArraysEasy {
