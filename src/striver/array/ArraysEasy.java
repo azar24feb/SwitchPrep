@@ -5,7 +5,89 @@ import java.util.Arrays;
 public class ArraysEasy {
 
     public static void main(String[] args) {
-        zeroesToEnd(new int[] {1,2,4,0,0,4,5,0,4,0,1,2});
+        findSingleElement(new int[] {3,4,1,2,1,2,3});
+    }
+
+    //Given a non-empty array of integers arr, every element appears twice except for one.
+    // Find that single one.
+    /*
+    My Sol - Arithemetic approach -
+    sum of distint elements - x1 + x2 + x3 + x4 ----- 1
+    sum of all elements = 2x1 + 2x2 + 2x3 + x4 ------ 2
+    hence 2 (1) - 2 = x4
+     */
+    /*
+    XOR operation a^b , look XOR in google, XOR of all the elements will give the unique element
+    two same numbers XOR is 0, XOR of a num with 0 is the num itself
+     */
+    public static void findSingleElement(int[] arr){
+        int reduce = Arrays.stream(arr)
+                .reduce(0, (a, b) -> a ^ b);
+        System.out.println(reduce);
+    }
+
+    //Count max cons ones
+    public static void countOne1(int[] arr) {
+        int count = 0, maxCount = 0;
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] == 1)
+                count++;
+            else if (arr[i] != 1) {
+                maxCount = Integer.max(maxCount, count);
+                count = 0;
+            }
+        }
+        System.out.println(maxCount);
+    }
+
+    //Count Maximum Consecutive One’s in the array
+    public static void countOne(int[] arr) {
+        int count = 0, maxCount = 0, i = 0, j = 0;
+        // start with  i = j = 1, first position of 1, then j++ till j is 0
+        // then reset i = j = 0, till i = j = 1, then repeat above step
+        while (j < arr.length) {
+            if (i == j) {
+                if (arr[i] == 1) {
+                    count = 1;
+                    j++;
+                } else {
+                    i++;
+                    j++;
+                }
+            } else if (arr[j] == 1) {
+                count++;
+                j++;
+            } else if (arr[j] != 1) {
+                i = j;
+                maxCount = count;
+            }
+            System.out.println(count + " : " + maxCount);
+        }
+        System.out.println(maxCount);
+    }
+
+    //union of two sorted arrays
+    public static void union(int[] left, int[] right) {
+        int lenL = left.length, lenR = right.length, l = lenL + lenR;
+        int[] result = new int[l];
+        int i = 0, j = 0, k = 0;
+        //iterate till one of the array is complete
+        while (i < lenL && j < lenR) {
+            if (left[i] < right[j])
+                result[k++] = left[i++];
+            else
+                result[k++] = right[j++];
+        }
+        //if items left in left arr
+        while(i  < lenL){
+            result[k++] = left[i++];
+        }
+        //if items left in right arr
+        while (j < lenR){
+            result[k++] = right[j++];
+        }
+        print(result);
+
     }
 
     // Important -> 1,2,4,0,0,4,5,0,4,0,1,2 - move all 0 to end and maintain order
