@@ -2,7 +2,7 @@ package src.striver.array;
 
 public class ArrayMedium {
     public static void main(String[] args) {
-        maxStockProfit(new int[]{7,9,3,6});
+        alternateSign(new int[]{7,9,-3,-6});
     }
 
     /**
@@ -10,10 +10,25 @@ public class ArrayMedium {
      * Without altering the relative order of positive and negative elements, you must return an array
      * of alternately positive and negative values.
      */
-    public static void alternateSign(int[] arr){
-        for (int i = 0; i < arr.length; i++){
-
+    public static void alternateSign(int[] arr) {
+        int[] pos = new int[(arr.length / 2) + 1];
+        int[] neg = new int[(arr.length / 2) + 1];
+        int p = 0, n = 0;
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] >= 0)
+                pos[p++] = arr[i];
+            else
+                neg[n++] = arr[i];
         }
+        p = 0;
+        n = 0;
+        for (int i = 0; i < arr.length; i++) {
+            if (i % 2 == 0)
+                arr[i] = pos[p++];
+            else
+                arr[i] = neg[n++];
+        }
+        ArraysEasy.print(arr);
     }
 
     /**
