@@ -9,6 +9,14 @@ public class ArrayMedium {
 //        longestConSeq(new int[]{100,102,105,101,109,108,200,4,6,5,8,9,7,10});
         setMatrixZero(new int[][]{{1,1,1,1},{1,1,1,1},{1,1,1,0},{1,1,1,1}});
     }
+
+    /**
+     * Given a matrix, your task is to rotate the matrix 90 degrees clockwise.
+     */
+    public static void rotateMatrix(int[][] matrix){
+
+    }
+
     /**
      * Set Matrix Zero
      * Problem Statement: Given a matrix if an element in the matrix is 0 then you will
