@@ -1,10 +1,92 @@
 package src.striver.array;
 
+import java.util.*;
+
+import static src.striver.array.ArraysEasy.*;
+
 public class ArrayMedium {
     public static void main(String[] args) {
-        alternateSign(new int[]{7,9,-3,-6, -5,-4,-3,1,2,3,-8,9});
+//        longestConSeq(new int[]{100,102,105,101,109,108,200,4,6,5,8,9,7,10});
+        setMatrixZero(new int[][]{{1,1,1,1},{1,1,1,1},{1,1,1,0},{1,1,1,1}});
     }
-    //                                                               7, -3 9,-6 1 -5 2 -4 3  -3 9 -8
+    /**
+     * Set Matrix Zero
+     * Problem Statement: Given a matrix if an element in the matrix is 0 then you will
+     * have to set its entire column and row to 0 and then return the matrix.
+     */
+    public static void setMatrixZero(int[][] matrix){
+        Set<Integer> l1 = new HashSet<>(), l2 = new HashSet<>();
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[i].length; j++) {
+                if(matrix[i][j] == 0) {
+                    l1.add(i);
+                    l2.add(j);
+                }
+            }
+        }
+
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[i].length; j++) {
+                if (l1.contains(i) || l2.contains(j)){ //instead of using set, use int[] to save time, if (int[i] == 1 || int[j] == 1 )
+                    matrix[i][j] = 0;
+                }
+            }
+        }
+        System.out.println(Arrays.deepToString(matrix));
+
+    }
+    /**
+     * You are given an array of ‘N’ integers.
+     * You need to find the length of the longest sequence which contains the consecutive elements.
+     * Input: [100, 200, 1, 3, 2, 4]
+     *
+     * Output: 4
+     *
+     * Explanation: The longest consecutive subsequence is 1, 2, 3, and 4.
+     */
+    public static void longestConSeq(int[] arr){
+        int[] array = Arrays.stream(arr)
+                .sorted().toArray();
+        print(array);
+        int c = 1, cMax = 0;
+        for (int i = 0; i < array.length-1; i++) {
+            if(array[i+1] - array[i] == 1){
+                c++;
+//                System.out.println(c);
+                if(c > cMax)
+                    cMax = c;
+            }
+            else c = 1;
+        }
+        System.out.println(cMax);
+    }
+
+    /**
+     * Given an array, print all the elements which are leaders.
+     * A Leader is an element that is greater than all of the elements on its right side in the array.
+     */
+    public static void leader(int[] arr){
+        // iterate from right, and store the max values
+        int max = arr[arr.length - 1];
+        List<Integer> res = new ArrayList<>();
+        res.add(max);
+        for (int i = arr.length-1; i >= 0; i--) {
+            if(arr[i] > max){
+                res.add(arr[i]);
+                max = arr[i];
+            }
+        }
+        System.out.println(res);
+    }
+
+    /**
+     * find next lexicographically greater permutation
+     * Input format: Arr[] = {1,3,2}
+     * Output: Arr[] = {2,1,3}
+     * Explanation: All permutations of {1,2,3} are {{1,2,3} , {1,3,2}, {2,13} , {2,3,1} , {3,1,2} , {3,2,1}}.
+     * So, the next permutation just after {1,3,2} is {2,1,3}.
+     */
+
 
     /**
      * There’s an array ‘A’ of size ‘N’ with an equal number of positive and negative elements.
@@ -26,7 +108,7 @@ public class ArrayMedium {
             }
         }
 
-        ArraysEasy.print(res);
+        print(res);
     }
 
     /**
