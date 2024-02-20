@@ -2,8 +2,9 @@ package src.striver.array;
 
 public class ArrayMedium {
     public static void main(String[] args) {
-        alternateSign(new int[]{7,9,-3,-6});
+        alternateSign(new int[]{7,9,-3,-6, -5,-4,-3,1,2,3,-8,9});
     }
+    //                                                               7, -3 9,-6 1 -5 2 -4 3  -3 9 -8
 
     /**
      * There’s an array ‘A’ of size ‘N’ with an equal number of positive and negative elements.
@@ -11,24 +12,21 @@ public class ArrayMedium {
      * of alternately positive and negative values.
      */
     public static void alternateSign(int[] arr) {
-        int[] pos = new int[(arr.length / 2) + 1];
-        int[] neg = new int[(arr.length / 2) + 1];
-        int p = 0, n = 0;
+        int p = 0, n = 1;
+        int[] res = new int[arr.length];
+        int temp;
         for (int i = 0; i < arr.length; i++) {
-            if (arr[i] >= 0)
-                pos[p++] = arr[i];
-            else
-                neg[n++] = arr[i];
+            if(arr[i] >= 0) {
+                res[p] = arr[i];
+                p+=2;
+            }
+            else {
+                res[n] = arr[i];
+                n+=2;
+            }
         }
-        p = 0;
-        n = 0;
-        for (int i = 0; i < arr.length; i++) {
-            if (i % 2 == 0)
-                arr[i] = pos[p++];
-            else
-                arr[i] = neg[n++];
-        }
-        ArraysEasy.print(arr);
+
+        ArraysEasy.print(res);
     }
 
     /**
