@@ -6,7 +6,7 @@ import static src.striver.array.ArraysEasy.*;
 
 public class ArrayMedium {
     public static void main(String[] args) {
-        countSubarrWithSumK(new int[]{1,2,3},3);
+        countSubarrWithSumK(new int[]{1},0);
 //        spiralMatrix(new int[][]{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}, {10, 11, 12}});
     }
 
@@ -14,23 +14,30 @@ public class ArrayMedium {
      *Count Subarray sum Equals K
      * Problem Statement: Given an array of integers and an integer k, return the total number of subarrays whose sum equals k.
      */
-    public static void countSubarrWithSumK(int[] arr, int k) {
-        int sum = 0;
-        int i = 0, j = 0, count = 0;
-        while (j < arr.length) {
-            if (sum < k){
-                sum += arr[j];
-                j++;
-            } else if (sum > k) {
-                sum -= arr[i];
-                i++;
-            }
-            else {
-                count++;
-                sum += arr[j];
-            }
+    public static int countSubarrWithSumK(int[] arr, int k) {
+        //Watch the video explanation, very good apprach using prefix sum
+        // we need to find no of prefix sum where sum = x - k, x is sum till ith index
+        int n = arr.length; // size of the given array.
+        Map<Integer,Integer> mpp = new HashMap<>();
+        int preSum = 0, cnt = 0;
+
+        mpp.put(0, 1); // Setting 0 in the map.
+        for (int i = 0; i < n; i++) {
+            // add current element to prefix Sum:
+            preSum += arr[i];
+
+            // Calculate x-k:
+            int remove = preSum - k;
+
+            // Add the number of subarrays to be removed:
+            cnt += mpp.getOrDefault(remove, 0);
+
+            // Update the count of prefix sum
+            // in the map.
+            mpp.put(preSum, mpp.getOrDefault(preSum, 0) + 1);
         }
-        System.out.println(count);
+        System.out.println(cnt);
+        return cnt;
     }
 
     /**
@@ -175,7 +182,7 @@ public class ArrayMedium {
 
     /**
      * Given an array, print all the elements which are leaders.
-     * A Leader is an element that is greater than all of the elements on its right side in the array.
+     * A Leader is an element that is greater than all the elements on its right side in the array.
      */
     public static void leader(int[] arr) {
         // iterate from right, and store the max values
