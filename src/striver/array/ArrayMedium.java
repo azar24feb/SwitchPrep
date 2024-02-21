@@ -6,15 +6,119 @@ import static src.striver.array.ArraysEasy.*;
 
 public class ArrayMedium {
     public static void main(String[] args) {
-//        longestConSeq(new int[]{100,102,105,101,109,108,200,4,6,5,8,9,7,10});
-        setMatrixZero(new int[][]{{1,1,1,1},{1,1,1,1},{1,1,1,0},{1,1,1,1}});
+        countSubarrWithSumK(new int[]{1,2,3},3);
+//        spiralMatrix(new int[][]{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}, {10, 11, 12}});
+    }
+
+    /**
+     *Count Subarray sum Equals K
+     * Problem Statement: Given an array of integers and an integer k, return the total number of subarrays whose sum equals k.
+     */
+    public static void countSubarrWithSumK(int[] arr, int k) {
+        int sum = 0;
+        int i = 0, j = 0, count = 0;
+        while (j < arr.length) {
+            if (sum < k){
+                sum += arr[j];
+                j++;
+            } else if (sum > k) {
+                sum -= arr[i];
+                i++;
+            }
+            else {
+                count++;
+                sum += arr[j];
+            }
+        }
+        System.out.println(count);
+    }
+
+    /**
+     * Spiral Traversal of Matrix
+     * Input: Matrix[][] = { { 1, 2, 3, 4 },
+     * { 5, 6, 7, 8 },
+     * { 9, 10, 11, 12 },
+     * { 13, 14, 15, 16 } }
+     * <p>
+     * Output: 1, 2, 3, 4, 8, 12, 16, 15, 14, 13, 9, 5, 6, 7, 11, 10.
+     */
+    public static void spiralMatrix(int[][] matrix) {
+        int noOfElements = matrix.length * matrix[0].length;
+        List<Integer> list = new ArrayList<>();
+        //We need to loop in 4 directions, forward, down, back and up in a cyclical order, initialize the boundaries
+        int colMax = matrix[0].length - 1, colMin = 0, rowMax = matrix.length - 1, rowMin = 0;
+        //Iterate the rows and colums in between the boundaries
+        int rowCount = 0, colCount = 0, count = 0;
+        String direction = "forward";
+        /*Everytime you move in a direction, increase the lower limit of that direction
+        eg, moving forward from colMin to colMax, increase the colMin
+        moving down from rowMin to rowMax, increase the rowMin
+        moving back from colMax to colMin, decrease the colMax
+        moving up from rowMax to rowMin, decrease the rowMax
+        Exception, in the first iteration moving forward,
+        don't increase the colMin, because you need to move back from colMax to colMin for the last row*/
+        while (count < noOfElements) {
+            switch (direction) {
+                case "forward":
+                    list.add(matrix[rowMin][colCount]);
+                    if (colCount == colMax) {
+                        if (count > matrix[0].length - 1) { // check if it is the first iteration
+                            colMin++;
+                        }
+                        direction = "down";
+                        rowCount++;
+                    } else colCount++;
+                    break;
+                case "down":
+                    list.add(matrix[rowCount][colMax]);
+                    if (rowCount == rowMax) {
+                        rowMin++;
+                        direction = "back";
+                        colCount--;
+                    } else rowCount++;
+                    break;
+                case "back":
+                    list.add(matrix[rowMax][colCount]);
+                    if (colCount == colMin) {
+                        colMax--;
+                        direction = "up";
+                        rowCount--;
+                    } else colCount--;
+                    break;
+                case "up":
+                    list.add(matrix[rowCount][colMin]);
+                    if (rowCount == rowMin) {
+                        rowMax--;
+                        direction = "forward";
+                        colCount++;
+                    } else rowCount--;
+                    break;
+            }
+            count++;
+        }
+        System.out.println(list);
     }
 
     /**
      * Given a matrix, your task is to rotate the matrix 90 degrees clockwise.
      */
-    public static void rotateMatrix(int[][] matrix){
-
+    public static void rotateMatrix(int[][] matrix) {
+        int temp;
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = i; j < matrix.length; j++) {
+                temp = matrix[i][j];
+                matrix[i][j] = matrix[j][i];
+                matrix[j][i] = temp;
+            }
+        }
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix.length / 2; j++) {
+                temp = matrix[i][j];
+                matrix[i][j] = matrix[i][matrix.length - j - 1];
+                matrix[i][matrix.length - j - 1] = temp;
+            }
+        }
+        System.out.println(Arrays.deepToString(matrix));
     }
 
     /**
@@ -22,11 +126,11 @@ public class ArrayMedium {
      * Problem Statement: Given a matrix if an element in the matrix is 0 then you will
      * have to set its entire column and row to 0 and then return the matrix.
      */
-    public static void setMatrixZero(int[][] matrix){
+    public static void setMatrixZero(int[][] matrix) {
         Set<Integer> l1 = new HashSet<>(), l2 = new HashSet<>();
         for (int i = 0; i < matrix.length; i++) {
             for (int j = 0; j < matrix[i].length; j++) {
-                if(matrix[i][j] == 0) {
+                if (matrix[i][j] == 0) {
                     l1.add(i);
                     l2.add(j);
                 }
@@ -35,7 +139,7 @@ public class ArrayMedium {
 
         for (int i = 0; i < matrix.length; i++) {
             for (int j = 0; j < matrix[i].length; j++) {
-                if (l1.contains(i) || l2.contains(j)){ //instead of using set, use int[] to save time, if (int[i] == 1 || int[j] == 1 )
+                if (l1.contains(i) || l2.contains(j)) { //instead of using set, use int[] to save time, if (int[i] == 1 || int[j] == 1 )
                     matrix[i][j] = 0;
                 }
             }
@@ -43,28 +147,28 @@ public class ArrayMedium {
         System.out.println(Arrays.deepToString(matrix));
 
     }
+
     /**
      * You are given an array of ‘N’ integers.
      * You need to find the length of the longest sequence which contains the consecutive elements.
      * Input: [100, 200, 1, 3, 2, 4]
-     *
+     * <p>
      * Output: 4
-     *
+     * <p>
      * Explanation: The longest consecutive subsequence is 1, 2, 3, and 4.
      */
-    public static void longestConSeq(int[] arr){
+    public static void longestConSeq(int[] arr) {
         int[] array = Arrays.stream(arr)
                 .sorted().toArray();
         print(array);
         int c = 1, cMax = 0;
-        for (int i = 0; i < array.length-1; i++) {
-            if(array[i+1] - array[i] == 1){
+        for (int i = 0; i < array.length - 1; i++) {
+            if (array[i + 1] - array[i] == 1) {
                 c++;
 //                System.out.println(c);
-                if(c > cMax)
+                if (c > cMax)
                     cMax = c;
-            }
-            else c = 1;
+            } else c = 1;
         }
         System.out.println(cMax);
     }
@@ -73,13 +177,13 @@ public class ArrayMedium {
      * Given an array, print all the elements which are leaders.
      * A Leader is an element that is greater than all of the elements on its right side in the array.
      */
-    public static void leader(int[] arr){
+    public static void leader(int[] arr) {
         // iterate from right, and store the max values
         int max = arr[arr.length - 1];
         List<Integer> res = new ArrayList<>();
         res.add(max);
-        for (int i = arr.length-1; i >= 0; i--) {
-            if(arr[i] > max){
+        for (int i = arr.length - 1; i >= 0; i--) {
+            if (arr[i] > max) {
                 res.add(arr[i]);
                 max = arr[i];
             }
@@ -106,13 +210,12 @@ public class ArrayMedium {
         int[] res = new int[arr.length];
         int temp;
         for (int i = 0; i < arr.length; i++) {
-            if(arr[i] >= 0) {
+            if (arr[i] >= 0) {
                 res[p] = arr[i];
-                p+=2;
-            }
-            else {
+                p += 2;
+            } else {
                 res[n] = arr[i];
-                n+=2;
+                n += 2;
             }
         }
 
@@ -122,11 +225,11 @@ public class ArrayMedium {
     /**
      * Stock Buy And Sell - maximum profit
      */
-    public static void maxStockProfit(int[] prices){
+    public static void maxStockProfit(int[] prices) {
         int max = 0, profit = 0, min = prices[0];
 
         for (int i = 0; i < prices.length; i++) {
-            if (prices[i] <  min) min = prices[i];
+            if (prices[i] < min) min = prices[i];
             profit = prices[i] - min;
             if (profit > max) max = profit;
         }
@@ -140,11 +243,11 @@ public class ArrayMedium {
      */
     public static void maxSubarray(int[] arr) {
         int sum = 0, max = Integer.MIN_VALUE;
-        for (int i = 0; i < arr.length; i++){
+        for (int i = 0; i < arr.length; i++) {
             sum += arr[i];
-            if(sum > max)
+            if (sum > max)
                 max = sum;
-            if(sum <= 0)
+            if (sum <= 0)
                 sum = 0;
         }
         System.out.println(max);
@@ -153,13 +256,13 @@ public class ArrayMedium {
     /**
      * Given an array of N integers, write a program to return an element that
      * occurs more than N/2 times in the given array. You may consider that such an element always exists in the array.
-     *
-     *  Moore’s Voting Algorithm
+     * <p>
+     * Moore’s Voting Algorithm
      */
-    public static void majorityElement(int[] arr){
+    public static void majorityElement(int[] arr) {
         int el = arr[0], count = 0;
-        for (int i = 0; i<arr.length; i++){
-            if (count == 0){
+        for (int i = 0; i < arr.length; i++) {
+            if (count == 0) {
                 el = arr[i];
             }
             int i1 = arr[i] == el ? count++ : count--;
@@ -179,7 +282,7 @@ public class ArrayMedium {
      * 2 sum problem - Given an array of integers arr[] and an integer target.
      * Return indices of the two numbers such that their sum is equal to the target. Otherwise, we will return {-1, -1}.
      */
-    public static void twoSum(int[] arr, int k){
+    public static void twoSum(int[] arr, int k) {
         /**
          * 2 methods - use hashing, and check if the pair is present in the map
          * or sort the array, and check with two pointers from start and end
