@@ -1,8 +1,8 @@
-package src.striver.array;
+package src.striver.Array;
 
 import java.util.*;
 
-import static src.striver.array.ArraysEasy.*;
+import static src.striver.Array.ArraysEasy.*;
 
 public class ArrayMedium {
     public static void main(String[] args) {
