@@ -1,35 +1,130 @@
 package src.dsa.tree;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
-class Node{
-    int data;
-    Node left;
-    Node right;
-    public Node(int data){
-        this.data = data;
-    }
-    public int getData() {
-        return data;
-    }
-    public void setData(int data) {
-        this.data = data;
-    }
-    public Node getLeft() {
-        return left;
-    }
-    public void setLeft(int left) {
-        this.left = new Node(left);
-    }
-    public Node getRight() {
-        return right;
-    }
-    public void setRight(int right) {
-        this.right = new Node(right);
-    }
-}
 public class BinaryTree {
+
+    /**
+     * Print the left view of the BT
+     *
+     * @param root  root node
+     * @param level next level
+     */
+    static int maxLevel = 0;
+    public static void printLeft(Node root, int level) {
+        if (root == null) {
+            return;
+        }
+        if (maxLevel < level){
+            System.out.print(root.data + " ");
+            maxLevel = level;
+        }
+        printLeft(root.right, level + 1);
+        printLeft(root.left, level + 1);
+    }
+
+    /**
+     * Find Max in BT
+     *
+     * @param root root of BT
+     * @return max value in BT
+     */
+    public static int getMax(Node root) {
+        if (root == null) {
+            return Integer.MIN_VALUE;
+        } else {
+            return Integer.max(root.data, Integer.max(getMax(root.left), getMax(root.right)));
+        }
+    }
+
+    public static int getSizeIterative(Node root) {
+        if (root == null) {
+            return 0;
+        }
+        Queue<Node> q = new LinkedList<>();
+        q.add(root);
+        int count = 0;
+        while (!q.isEmpty()) {
+            Node cur = q.poll();
+            count++;
+            if (cur.left != null)
+                q.add(cur.left);
+            if (cur.right != null)
+                q.add(cur.right);
+        }
+        return count;
+    }
+
+    /**
+     * Size of the BinaryTree
+     */
+    public static int getSize(Node root) {
+        if (root == null) {
+            return 0;
+        } else {
+            return getSize(root.left) + getSize(root.right) + 1;
+        }
+    }
+
+    /**
+     * Level Order Traversal Line by Line Method 2
+     * Here you run two loops, 2nd loop runs for each level
+     *
+     * @param root pass the root node
+     */
+    public static void printLevelOrdeLineByLine2(Node root) {
+        if (root == null) return;
+        Queue<Node> q = new LinkedList<>();
+        q.add(root);
+        while (!q.isEmpty()) {
+            int count = q.size();
+            for (int i = 0; i < count; i++) {
+                Node curr = q.poll();
+                System.out.print(curr.data + " ");
+                if (curr.left != null)
+                    q.add(curr.left);
+                if (curr.right != null)
+                    q.add(curr.right);
+            }
+            System.out.println();
+        }
+
+    }
+
+    /**
+     * Level Order Traversal Line by Line Method 1
+     * Here you insert a null after each level is complete
+     *
+     * @param root pass the root node
+     */
+    public static void printLevelOrdeLineByLine(Node root) {
+        if (root == null) {
+            return;
+        }
+        Queue<Node> q = new LinkedList<>();
+        q.add(root);
+        q.add(null); //end of level marker
+        while (q.size() > 1) {
+            Node curr = q.poll();
+            //check if current is null, that means you are at the end of the level,
+            // then insert another null, because while coming to the end of the level,
+            // you already enqueued all elements of next level
+            if (curr == null) {
+                System.out.println();
+                q.add(null);
+            } else {
+                System.out.printf(curr.data + " ");
+                if (curr.getLeft() != null)
+                    q.add(curr.left);
+                if (curr.getRight() != null)
+                    q.add(curr.right);
+            }
+        }
+    }
+
     public static void inOrder(Node root) {
         if (root != null) {
             inOrder(root.getLeft());
@@ -94,7 +189,7 @@ public class BinaryTree {
         }
         Queue<Node> q = new LinkedList<>();
         q.add(root);
-        while (!q.isEmpty()){
+        while (!q.isEmpty()) {
             Node cur = q.poll();
             System.out.println(cur.data);
             if (cur.left != null)
@@ -102,7 +197,5 @@ public class BinaryTree {
             if (cur.right != null)
                 q.add(cur.right);
         }
-
-
     }
 }
